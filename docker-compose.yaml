@@ -1,0 +1,52 @@
+version: "3.3"
+services:
+  client:
+    build: ./client
+    container_name: client
+    ports:
+      - "3000:80"
+    environment:
+      - VUE_APP_API_URL=https://server:8080/
+    depends_on:
+      - server
+  server:
+    build: ./server
+    container_name: server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+      - elastic
+    command: ["./check-elastic.sh", "elastic:9200", "--", "npm", "run", "serve"]
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8081
+      - HTTPS_PORT=8080
+      - DATABASE_URL=mongodb://mongodb:27017/translations
+      - ELASTICSEARCH_URL=http://elastic:9200
+      - ELASTICSEARCH_INDEX=translations
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0
+    environment:
+      - discovery.type=single-node
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl --silent --fail localhost:9200/_cluster/health || exit 1",
+        ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9201:9200"
+    expose:
+      - "9200"
+  mongodb:
+    image: mongo
+    ports:
+      - "27018:27017"
