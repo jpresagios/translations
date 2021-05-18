@@ -1,0 +1,101 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Translation Management System",
+    "description": "TMS API"
+  },
+  "schemes": ["http", "https"],
+  "basePath": "/",
+  "paths": {
+    "/import": {
+      "post": {
+        "summary": "Import data in json format",
+        "description": "Upload a file as base64 string and saves its data ready to search",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "type": "json",
+              "required": ["name", "data"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "At most 3 results that matches the criteria",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "file": {
+                    "type": "string"
+                  },
+                  "data": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/translate": {
+      "post": {
+        "summary": "Query the imported data",
+        "description": "In a fast way retrieve the closest results (up to 3).",
+        "parameters": [
+          {
+            "name": "criteria",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "json",
+              "required": ["criteria"],
+              "properties": {
+                "criteria": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "At most 3 results that matches the criteria",
+            "schema": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "source": {
+                    "type": "string"
+                  },
+                  "target": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
