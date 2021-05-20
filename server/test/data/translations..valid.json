@@ -1,0 +1,18 @@
+[
+    {
+      "source": "Hello World",
+      "target": "Hola mundo"
+    },
+    {
+      "source": "Hello Everyone",
+      "target": "Hola a todos"
+    },
+    {
+      "source": "Hello guys, allow me to introduce the newest team member.",
+      "target": "Hola chicos, permítanme presentar al nuevo colega de equipo."
+    },
+    {
+      "source": "A dog was running outside",
+      "target": "Un perro corría afuera"
+    }
+  ]
